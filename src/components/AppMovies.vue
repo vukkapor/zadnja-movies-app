@@ -4,6 +4,7 @@
     <ul v-for="movie in filteredMovies" :key="movie.id">
       <movie-row :movie="movie" />
     </ul>
+    <div v-if="filteredMovies.length===0">Ne postoji nijedan</div>
   </div>
 </template>
 <script>
