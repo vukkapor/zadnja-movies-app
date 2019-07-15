@@ -1,35 +1,41 @@
 <template>
   <div>
-    <table style="width:100%">
-      <tr>
-        <th>ID</th>
-        <th>Title</th>
-        <th>Director</th>
-        <th>Image url</th>
-        <th>Duration</th>
-        <th>Release date</th>
-        <th>Genre</th>
-      </tr>
-      <tr v-for="movie in movies" :key="movie.id">
-        <td>{{movie.id}}</td>
-        <td>{{movie.title}}</td>
-        <td>{{movie.director}}</td>
-        <td>{{movie.imageUrl}}</td>
-        <td>{{movie.duration}}</td>
-        <td>{{movie.releaseDate}}</td>
-        <td>{{movie.genre}}</td>
-      </tr>
-    </table>
+    <movie-search @search-movie="searchedMovies"></movie-search>
+    <ul v-for="movie in filteredMovies" :key="movie.id">
+      <movie-row :movie="movie" />
+    </ul>
   </div>
 </template>
-
 <script>
 import { moviesService } from "../services/movies";
+import MovieRow from "./MovieRow";
+import MovieSearch from "./MovieSearch";
+
 export default {
+  components: {
+    MovieRow,
+    MovieSearch
+  },
+
   data() {
     return {
-      movies: []
+      movies: [],
+      searchTerm: ""
     };
+  },
+
+  methods: {
+    searchedMovies(search) {
+      this.searchTerm = search;
+    }
+  },
+
+  computed: {
+    filteredMovies() {
+      return this.movies.filter(movie =>
+        movie.title.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    }
   },
 
   beforeRouteEnter(to, from, next) {
