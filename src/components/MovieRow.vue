@@ -1,6 +1,6 @@
 <template>
   <div>
-    <li>
+    <li :class="{selected: isSelected}">
       ID: {{movie.id}}
       Title: {{movie.title}}
       Director: {{movie.director}}
@@ -9,13 +9,14 @@
       Release Date: {{movie.releaseDate}}
       Genre: {{movie.genre}}
     </li>
-    <button @click="selected">Select</button>
+    <button v-if="!isSelected" @click="selected">Select</button>
+    <button v-else @click="selected">Deselect</button>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["movie"],
+  props: ["movie", "isSelected"],
 
   methods: {
     selected() {
@@ -24,4 +25,13 @@ export default {
   }
 };
 </script>
+
+<style>
+.selected {
+  color: red;
+}
+.notSelected {
+  color: blue;
+}
+</style>
 

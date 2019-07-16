@@ -3,15 +3,19 @@
     <movie-search @search-movie="searchedMovies"></movie-search>
     <paginate name="movies" :list="filteredMovies" :per="5">
       <ul v-for="movie in paginated('movies')" :key="movie.id">
-        <movie-row :movie="movie" @select="selectedMoviesMethod" />
+        <movie-row
+          :isSelected="isInSelectedList(movie.id)"
+          :movie="movie"
+          @select="selectedMoviesMethod"
+        />
       </ul>
     </paginate>
-    <div v-if="filteredMovies.length===0">Ne postoji nijedan</div>
+    <div v-if="!filteredMovies.length">Ne postoji nijedan</div>
     <div>Broj selektovanih filmova: {{selectedMovies.length}}</div>
 
     <div>
       <button v-if="movies.length !== selectedMovies.length" @click="selectAll">Select All</button>
-      <button v-if="movies.length === selectedMovies.length" @click="deselectAll">Deselect All</button>
+      <button v-if="selectedMovies.length" @click="deselectAll">Deselect All</button>
     </div>
     <div>
       <button @click="nameAsc">Sort by name ASC</button>
@@ -55,12 +59,12 @@ export default {
       }
       this.selectedMovies.push(id);
     },
+    isInSelectedList(id) {
+      return this.selectedMovies.includes(id);
+    },
 
     selectAll() {
-      this.selectedMovies = [];
-      this.movies.forEach(movie => {
-        this.selectedMovies.push(movie.id);
-      });
+      this.selectedMovies = this.movies.map(movie => movie.id);
     },
 
     deselectAll() {
