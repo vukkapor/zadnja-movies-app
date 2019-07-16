@@ -11,6 +11,12 @@
       <button v-if="movies.length !== selectedMovies.length" @click="selectAll">Select All</button>
       <button v-if="movies.length === selectedMovies.length" @click="deselectAll">Deselect All</button>
     </div>
+    <div>
+      <button @click="nameAsc">Sort by name ASC</button>
+      <button @click="nameDesc">Sort by name DESC</button>
+      <button @click="durationAsc">Sort by duration ASC</button>
+      <button @click="durationDesc">Sort by duration DESC</button>
+    </div>
   </div>
 </template>
 <script>
@@ -55,6 +61,42 @@ export default {
 
     deselectAll() {
       this.selectedMovies = [];
+    },
+
+    nameAsc() {
+      this.movies = this.movies.sort(this.compareTitle);
+    },
+
+    nameDesc() {
+      let tempMovies = this.movies.sort(this.compareTitle);
+      this.movies = tempMovies.reverse();
+    },
+
+    durationAsc() {
+      this.movies = this.movies.sort(this.compareDuration);
+    },
+
+    durationDesc() {
+      let tempMovies = this.movies.sort(this.compareDuration);
+      this.movies = tempMovies.reverse();
+    },
+
+    compareTitle(a, b) {
+      let titleA = a.title.toUpperCase(); // ignore upper and lowercase
+      let titleB = b.title.toUpperCase(); // ignore upper and lowercase
+
+      if (titleA < titleB) {
+        return -1;
+      }
+      if (titleA > titleB) {
+        return 1;
+      }
+      return 0;
+    },
+    compareDuration(a, b) {
+      let tempA = parseInt(a.duration, 10);
+      let tempB = parseInt(b.duration, 10);
+      return tempA - tempB;
     }
   },
 
