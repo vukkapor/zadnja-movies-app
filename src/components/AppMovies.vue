@@ -6,6 +6,11 @@
     </ul>
     <div v-if="filteredMovies.length===0">Ne postoji nijedan</div>
     <div>Broj selektovanih filmova: {{selectedMovies.length}}</div>
+
+    <div>
+      <button v-if="movies.length !== selectedMovies.length" @click="selectAll">Select All</button>
+      <button v-if="movies.length === selectedMovies.length" @click="deselectAll">Deselect All</button>
+    </div>
   </div>
 </template>
 <script>
@@ -39,6 +44,17 @@ export default {
         return;
       }
       this.selectedMovies.push(id);
+    },
+
+    selectAll() {
+      this.selectedMovies = [];
+      this.movies.forEach(movie => {
+        this.selectedMovies.push(movie.id);
+      });
+    },
+
+    deselectAll() {
+      this.selectedMovies = [];
     }
   },
 
