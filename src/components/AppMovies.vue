@@ -1,9 +1,11 @@
 <template>
   <div>
     <movie-search @search-movie="searchedMovies"></movie-search>
-    <ul v-for="movie in filteredMovies" :key="movie.id">
-      <movie-row :movie="movie" @select="selectedMoviesMethod" />
-    </ul>
+    <paginate name="movies" :list="filteredMovies" :per="5">
+      <ul v-for="movie in paginated('movies')" :key="movie.id">
+        <movie-row :movie="movie" @select="selectedMoviesMethod" />
+      </ul>
+    </paginate>
     <div v-if="filteredMovies.length===0">Ne postoji nijedan</div>
     <div>Broj selektovanih filmova: {{selectedMovies.length}}</div>
 
@@ -17,6 +19,7 @@
       <button @click="durationAsc">Sort by duration ASC</button>
       <button @click="durationDesc">Sort by duration DESC</button>
     </div>
+    <paginate-links for="movies"></paginate-links>
   </div>
 </template>
 <script>
@@ -34,7 +37,8 @@ export default {
     return {
       movies: [],
       searchTerm: "",
-      selectedMovies: []
+      selectedMovies: [],
+      paginate: ["movies"]
     };
   },
 
@@ -122,3 +126,66 @@ export default {
   }
 };
 </script>
+
+<style>
+#app {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 20px;
+  text-align: center;
+  color: #000000;
+}
+
+h1,
+h2 {
+  font-weight: normal;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+.paginate-list {
+  width: 159px;
+  margin: 0 auto;
+  text-align: left;
+  li {
+    display: block;
+    &:before {
+      content: "⚬ ";
+      font-weight: bold;
+      color: slategray;
+    }
+  }
+}
+
+.paginate-links.items {
+  user-select: none;
+  a {
+    cursor: pointer;
+  }
+  li.active a {
+    font-weight: bold;
+  }
+  li.next:before {
+    content: " | ";
+    margin-right: 13px;
+    color: #ddd;
+  }
+  li.disabled a {
+    color: #ccc;
+    cursor: no-drop;
+  }
+}
+
+a {
+  color: #42b983;
+}
+</style>
